@@ -26,6 +26,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/container-storage-interface/spec/lib/go/csi"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"github.com/ceph/ceph-csi/internal/cephfs/core"
 	cerrors "github.com/ceph/ceph-csi/internal/cephfs/errors"
 	"github.com/ceph/ceph-csi/internal/cephfs/mounter"
@@ -37,10 +41,6 @@ import (
 	"github.com/ceph/ceph-csi/internal/util/fscrypt"
 	iolock "github.com/ceph/ceph-csi/internal/util/lock"
 	"github.com/ceph/ceph-csi/internal/util/log"
-
-	"github.com/container-storage-interface/spec/lib/go/csi"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // NodeServer struct of ceph CSI driver with supported methods of CSI
@@ -226,11 +226,15 @@ func (ns *NodeServer) NodeStageVolume(
 	}
 	defer ns.VolumeLocks.Release(req.GetVolumeId())
 
+	log.ErrorLog(ctx, "xxx: nodeserver getVolumeOptions: volContext: %+s", req.GetVolumeContext())
 	volOptions, err := ns.getVolumeOptions(ctx, volID, req.GetVolumeContext(), req.GetSecrets())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	defer volOptions.Destroy()
+
+	log.ErrorLog(ctx, "xxx: nodeserver getVolumeOptions: volOptions: %+s", volOptions)
+	log.ErrorLog(ctx, "xxx: nodeserver getVolumeOptions: volOptions.FsName: %+s", volOptions.FsName)
 
 	// Skip extracting NetNamespaceFilePath if the clusterID is empty.
 	// In case of pre-provisioned volume the clusterID is not set in the

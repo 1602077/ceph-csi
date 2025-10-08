@@ -63,7 +63,8 @@ func mountFuse(ctx context.Context, mountPoint string, cr *util.Credentials, vol
 	if fmo != "" {
 		args = append(args, "-o", fmo)
 	}
-
+	log.ErrorLog(ctx, "xxxx mountFuse: volumeOptions: %#s", volOptions)
+	log.ErrorLog(ctx, "xxxx mountFuse: fs: %s", volOptions.FsName)
 	if volOptions.FsName != "" {
 		args = append(args, "--client_mds_namespace="+volOptions.FsName)
 	}

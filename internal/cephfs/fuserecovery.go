@@ -129,10 +129,13 @@ func (ns *NodeServer) tryRestoreFuseMountsInNodePublish(
 		volOptions *store.VolumeOptions
 	)
 
+	log.ErrorLog(ctx, "xxx: fuse recovery getVolumeOptions: volContext: %+s", volContext)
 	volOptions, err = ns.getVolumeOptions(ctx, volID, volContext, nsMountinfo.Secrets)
 	if err != nil {
 		return err
 	}
+	log.ErrorLog(ctx, "xxx: fuse recovery getVolumeOptions: volOptions: %+s", volOptions)
+	log.ErrorLog(ctx, "xxx: fuse recovery getVolumeOptions: volOptions.FsName: %+s", volOptions.FsName)
 
 	volMounter, err = mounter.New(volOptions)
 	if err != nil {

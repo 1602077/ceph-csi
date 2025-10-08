@@ -24,13 +24,13 @@ import (
 	"strings"
 	"sync"
 
+	fsAdmin "github.com/ceph/go-ceph/cephfs/admin"
+	"github.com/ceph/go-ceph/rados"
+
 	cerrors "github.com/ceph/ceph-csi/internal/cephfs/errors"
 	fsutil "github.com/ceph/ceph-csi/internal/cephfs/util"
 	"github.com/ceph/ceph-csi/internal/util"
 	"github.com/ceph/ceph-csi/internal/util/log"
-
-	fsAdmin "github.com/ceph/go-ceph/cephfs/admin"
-	"github.com/ceph/go-ceph/rados"
 )
 
 var (
@@ -195,6 +195,8 @@ func (s *subVolumeClient) GetSubVolumeInfo(ctx context.Context) (*Subvolume, err
 	for i, feature := range info.Features {
 		subvol.Features[i] = string(feature)
 	}
+
+	log.ErrorLog(ctx, "xxx: sub volume info: %+s", subvol)
 
 	return &subvol, nil
 }
